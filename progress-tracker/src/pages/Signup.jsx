@@ -1,0 +1,64 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
+
+function Signup() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Signup Data:", formData);
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-600 to-indigo-700">
+      <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
+        <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">Create Your Account</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="text"
+            name="name"
+            placeholder="Full Name"
+            value={formData.name}
+            onChange={handleChange}
+            className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-purple-500"
+            required
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email Address"
+            value={formData.email}
+            onChange={handleChange}
+            className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-purple-500"
+            required
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-purple-500"
+            required
+          />
+          <button type="submit" className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded-xl transition">
+            Sign Up
+          </button>
+        </form>
+        <p className="text-gray-600 text-center mt-4">
+          Already have an account? <Link to="/login" className="text-purple-600 hover:underline">Log in</Link>
+        </p>
+      </div>
+    </div>
+  );
+}
+
+export default Signup;
