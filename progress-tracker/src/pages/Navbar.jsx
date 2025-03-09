@@ -1,6 +1,8 @@
 
 
 
+
+
 import { Link } from "react-router-dom";
 
 function Navbar() {
@@ -20,6 +22,9 @@ function Navbar() {
           <Link to="/progress-tracker" className="hover:underline">
             Progress Tracker
           </Link>
+          <Link to="/food" className="hover:underline">
+            Harmful Foods
+          </Link>
           <Link to="/login" className="hover:underline">
             Log In
           </Link>
@@ -36,3 +41,8 @@ function Navbar() {
 }
 
 export default Navbar;
+
+
+
+
+

@@ -131,7 +131,7 @@ const ProgressTracker = () => {
   return (
     <div className="min-h-screen bg-gray-100 py-10 px-4">
       <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6">
-        <h1 className="text-3xl font-bold text-center text-red-600">🚫 Harmful Foods Tracker</h1>
+        <h1 className="text-3xl font-bold text-center text-red-600">Foods to avoid </h1>
 
         {harmfulFoods.map((section, categoryIndex) => (
           <div key={categoryIndex} className="mt-6 p-4 border border-gray-300 rounded-lg bg-gray-50">
