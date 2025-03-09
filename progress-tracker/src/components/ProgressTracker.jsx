@@ -2,83 +2,99 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import React, { useState, useEffect } from "react";
+import axios from "axios"; // Import axios
 
 const harmfulFoods = [
+  // Your harmfulFoods array remains unchanged
   {
-    category: "Sugary & Processed Foods (Causes Wrinkles & Aging!)",
-    items: [
-      "White Sugar (in sweets, cakes, pastries, etc.)",
-      "Soft Drinks (Coca-Cola, Pepsi, Fanta, Sprite, etc.)",
-      "Energy Drinks (Red Bull, Monster, etc.)",
-      "Artificial Sweeteners (Aspartame, Sucralose, Saccharin)",
-      "Candies & Toffees (High-fructose corn syrup damages collagen)",
-      "Chocolate with Sugar (Eat only dark chocolate 85%+ cocoa)",
-      "Jams & Jellies (Loaded with refined sugar)",
-      "Ice Cream (Full of sugar + bad fats)",
-      "Canned Fruits (High fructose syrup = premature wrinkles)",
-      "Breakfast Cereals (Cornflakes, Chocos, etc. = hidden sugar)",
-    ],
-  },
-  {
-    category: "Refined Carbs (Speeds Up Skin Aging & Dryness!)",
-    items: [
-      "White Bread (Spikes insulin, speeds up skin aging)",
-      
-      "Pasta (Regular wheat pasta damages skin collagen)",
-      "Instant Noodles (Maggi, Cup Noodles, Top Ramen, etc.)",
-      "White Flour (Maida) – Found in pizzas, burgers, samosas",
-      "Biscuits & Cookies (Most contain refined sugar & flour)",
-      "Bakery Cakes & Muffins (High in sugar & processed oils)",
-      "Doughnuts (Deep-fried + sugar = double aging effect)",
-      "Pani Puri (Refined flour + unhygienic oil = bloating & bad skin)",
-      "Burgers & Pizzas (Loaded with bad carbs & inflammatory oils)",
-    ],
-  },
-  {
-    category: "Deep-Fried & Oily Foods (Causes Acne & Dull Skin!)",
-    items: [
-      "French Fries (Trans fats damage skin barrier)",
-      "Chips (Lays, Kurkure, Bingo = deep-fried & artificial flavors)",
-      "Samosas & Pakoras (Deep-fried with reused unhealthy oils)",
-      "Fried Chicken (KFC & other fast food = worst for skin & health)",
-      "Popcorn (Microwave popcorn has toxic artificial butter)",
-      "Deep-fried Pooris & Bhaturas (Inflammation-causing trans fats)",
-      "Vada Pav & Pav Bhaji (Refined carbs + fried components)",
-      "Puffs & Patties (High in refined flour & bad fats)",
-      "Fried Namkeen (Mixtures, sev, murukku)",
-      "Onion Rings & Cheese Balls (Cheese + deep-fried batter = double damage)",
-    ],
-  },
-  {
-    category: "Processed & Artificially Flavored Foods (Speeds Up Aging!)",
-    items: [
-      "Instant Soups (Maggie Soup, Knorr, etc. – Contains MSG & chemicals)",
-      "Processed Cheese Slices & Cheese Spread (Artificial ingredients)",
-      "Mayonnaise (High in unhealthy oils & preservatives)",
-      "Ketchup (Hidden sugar & artificial flavoring)",
-      "Pickles (High salt content = puffy face & bloating)",
-      "Artificial Flavored Yogurts (Sugar-loaded 'fruit' yogurts)",
-      "Ice Tea & Artificial Juices (Packaged juices have added sugar)",
-      "Packaged Salads with Dressings (Dressings are high in sugar & bad fats)",
-      "Flavored Milk (Sugary additives destroy gut health)",
-      "Instant Coffee Mixes (High sugar + artificial flavors)",
-    ],
-  },
-  {
-    category: "Unhealthy Oils & Fats (Weakens Skin & Increases Wrinkles!)",
-    items: [
-      "Soybean Oil",
-      "Canola Oil",
-      "Palm Oil (Found in cheap chocolates, chips, biscuits)",
-      "Vanaspati (Worst for skin, causes bloating & acne)",
-      "Margarine (Fake butter = high trans fats)",
-      "Dalda Ghee (Processed = inflammatory for skin & gut)",
-      "Cheap Street Food Oils (Used multiple times, worst for skin)",
-      "Butter Popcorn (Artificial butter damages skin barrier)",
-      "Fried Frozen Snacks (French fries, nuggets, frozen samosas)",
-    ],
-  },
+        category: "Sugary & Processed Foods (Causes Wrinkles & Aging!)",
+        items: [
+          "White Sugar (in sweets, cakes, pastries, etc.)",
+          "Soft Drinks (Coca-Cola, Pepsi, Fanta, Sprite, etc.)",
+          "Energy Drinks (Red Bull, Monster, etc.)",
+          "Artificial Sweeteners (Aspartame, Sucralose, Saccharin)",
+          "Candies & Toffees (High-fructose corn syrup damages collagen)",
+          "Chocolate with Sugar (Eat only dark chocolate 85%+ cocoa)",
+          "Jams & Jellies (Loaded with refined sugar)",
+          "Ice Cream (Full of sugar + bad fats)",
+          "Canned Fruits (High fructose syrup = premature wrinkles)",
+          "Breakfast Cereals (Cornflakes, Chocos, etc. = hidden sugar)",
+        ],
+      },
+      {
+        category: "Refined Carbs (Speeds Up Skin Aging & Dryness!)",
+        items: [
+          "White Bread (Spikes insulin, speeds up skin aging)",
+          
+          "Pasta (Regular wheat pasta damages skin collagen)",
+          "Instant Noodles (Maggi, Cup Noodles, Top Ramen, etc.)",
+          "White Flour (Maida) – Found in pizzas, burgers, samosas",
+          "Biscuits & Cookies (Most contain refined sugar & flour)",
+          "Bakery Cakes & Muffins (High in sugar & processed oils)",
+          "Doughnuts (Deep-fried + sugar = double aging effect)",
+          "Pani Puri (Refined flour + unhygienic oil = bloating & bad skin)",
+          "Burgers & Pizzas (Loaded with bad carbs & inflammatory oils)",
+        ],
+      },
+      {
+        category: "Deep-Fried & Oily Foods (Causes Acne & Dull Skin!)",
+        items: [
+          "French Fries (Trans fats damage skin barrier)",
+          "Chips (Lays, Kurkure, Bingo = deep-fried & artificial flavors)",
+          "Samosas & Pakoras (Deep-fried with reused unhealthy oils)",
+          "Fried Chicken (KFC & other fast food = worst for skin & health)",
+          "Popcorn (Microwave popcorn has toxic artificial butter)",
+          "Deep-fried Pooris & Bhaturas (Inflammation-causing trans fats)",
+          "Vada Pav & Pav Bhaji (Refined carbs + fried components)",
+          "Puffs & Patties (High in refined flour & bad fats)",
+          "Fried Namkeen (Mixtures, sev, murukku)",
+          "Onion Rings & Cheese Balls (Cheese + deep-fried batter = double damage)",
+        ],
+      },
+      {
+        category: "Processed & Artificially Flavored Foods (Speeds Up Aging!)",
+        items: [
+          "Instant Soups (Maggie Soup, Knorr, etc. – Contains MSG & chemicals)",
+          "Processed Cheese Slices & Cheese Spread (Artificial ingredients)",
+          "Mayonnaise (High in unhealthy oils & preservatives)",
+          "Ketchup (Hidden sugar & artificial flavoring)",
+          "Pickles (High salt content = puffy face & bloating)",
+          "Artificial Flavored Yogurts (Sugar-loaded 'fruit' yogurts)",
+          "Ice Tea & Artificial Juices (Packaged juices have added sugar)",
+          "Packaged Salads with Dressings (Dressings are high in sugar & bad fats)",
+          "Flavored Milk (Sugary additives destroy gut health)",
+          "Instant Coffee Mixes (High sugar + artificial flavors)",
+        ],
+      },
+      {
+        category: "Unhealthy Oils & Fats (Weakens Skin & Increases Wrinkles!)",
+        items: [
+          "Soybean Oil",
+          "Canola Oil",
+          "Palm Oil (Found in cheap chocolates, chips, biscuits)",
+          "Vanaspati (Worst for skin, causes bloating & acne)",
+          "Margarine (Fake butter = high trans fats)",
+          "Dalda Ghee (Processed = inflammatory for skin & gut)",
+          "Cheap Street Food Oils (Used multiple times, worst for skin)",
+          "Butter Popcorn (Artificial butter damages skin barrier)",
+          "Fried Frozen Snacks (French fries, nuggets, frozen samosas)",
+        ],
+      },
 ];
 
 const ProgressTracker = () => {
@@ -117,13 +133,23 @@ const ProgressTracker = () => {
     );
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (allChecked()) {
       const today = new Date().toLocaleDateString();
 
       // 🔥 Ensure only one entry per day
       if (!progressData.some((entry) => entry.date === today)) {
-        setProgressData([...progressData, { date: today, status: "Achieved" }]);
+        const progress = { date: today, status: "Achieved" };
+        
+        try {
+          // Send a POST request to your server to store the progress
+          await axios.post("http://localhost:8080/api/progress", progress);
+
+          // Update local progressData after successful submission
+          setProgressData([...progressData, progress]);
+        } catch (error) {
+          console.error("Error submitting progress:", error);
+        }
       }
     }
   };
