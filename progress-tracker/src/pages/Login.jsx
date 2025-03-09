@@ -1,25 +1,44 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
 
-function Login() {
+
+
+
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+
+function Login({ setIsLoggedIn }) {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+  const [error, setError] = useState(null);
+  const navigate = useNavigate(); // Redirect after successful login
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login Data:", formData);
+    try {
+      const response = await axios.post("http://localhost:8080/api/users/login", formData);
+      // Save JWT token in localStorage or cookies
+      localStorage.setItem("authToken", response.data.token);
+      // Update the state to reflect the user is logged in
+      setIsLoggedIn(true);
+      // Redirect to the dashboard or wherever needed
+      navigate("/dashboard");
+    } catch (err) {
+      setError("Login failed. Please check your credentials.");
+      console.error(err);
+    }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-600 to-indigo-700">
       <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">Welcome Back</h2>
+        {error && <div className="text-red-600 mb-4 text-center">{error}</div>}
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="email"
