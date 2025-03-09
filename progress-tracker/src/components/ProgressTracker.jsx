@@ -2,23 +2,11 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useState, useEffect } from "react";
 
 const harmfulFoods = [
   {
-    category: "Sugary & Processed Foods (Wrinkles & Sagging Skin!)",
+    category: "Sugary & Processed Foods (Causes Wrinkles & Aging!)",
     items: [
       "White Sugar (in sweets, cakes, pastries, etc.)",
       "Soft Drinks (Coca-Cola, Pepsi, Fanta, Sprite, etc.)",
@@ -33,10 +21,10 @@ const harmfulFoods = [
     ],
   },
   {
-    category: "Refined Carbs (Causes Skin Aging & Dryness!)",
+    category: "Refined Carbs (Speeds Up Skin Aging & Dryness!)",
     items: [
       "White Bread (Spikes insulin, speeds up skin aging)",
-     
+      
       "Pasta (Regular wheat pasta damages skin collagen)",
       "Instant Noodles (Maggi, Cup Noodles, Top Ramen, etc.)",
       "White Flour (Maida) – Found in pizzas, burgers, samosas",
@@ -48,51 +36,49 @@ const harmfulFoods = [
     ],
   },
   {
-        category: "Deep-Fried & Oily Foods (Causes Acne & Dull Skin!)",
-        items: [
-          "French Fries (Trans fats damage skin barrier)",
-          "Chips (Lays, Kurkure, Bingo = deep-fried & artificial flavors)",
-          "Samosas & Pakoras (Deep-fried with reused unhealthy oils)",
-          "Fried Chicken (KFC & other fast food = worst for skin & health)",
-          "Popcorn (Microwave popcorn has toxic artificial butter)",
-          "Deep-fried Pooris & Bhaturas (Inflammation-causing trans fats)",
-          "Vada Pav & Pav Bhaji (Refined carbs + fried components)",
-          "Puffs & Patties (High in refined flour & bad fats)",
-          "Fried Namkeen (Mixtures, sev, murukku)",
-          "Onion Rings & Cheese Balls (Cheese + deep-fried batter = double damage)",
-        ],
-      },
-      {
-        category: "Processed & Artificially Flavored Foods (Speeds Up Aging!)",
-        items: [
-          "Instant Soups (Maggi Soup, Knorr – Contains MSG & chemicals)",
-          "Processed Cheese Slices & Cheese Spread (Artificial ingredients)",
-          "Mayonnaise (High in unhealthy oils & preservatives)",
-          "Ketchup (Hidden sugar & artificial flavoring)",
-          "Pickles (High salt content = puffy face & bloating)",
-          "Artificial Flavored Yogurts (Sugar-loaded 'fruit' yogurts)",
-          "Ice Tea & Artificial Juices (Packaged juices have added sugar)",
-          "Packaged Salads with Dressings (Dressings are high in sugar & bad fats)",
-          "Flavored Milk (Sugary additives destroy gut health)",
-          "Instant Coffee Mixes (High sugar + artificial flavors)",
-        ],
-      },
-      {
-        category: "Unhealthy Oils & Fats (Weakens Skin & Causes Wrinkles!)",
-        items: [
-          "Soybean Oil",
-          "Canola Oil",
-          "Palm Oil (Found in cheap chocolates, chips, biscuits)",
-          "Vanaspati (Worst for skin, causes bloating & acne)",
-          "Margarine (Fake butter = high trans fats)",
-          "Dalda Ghee (Processed = inflammatory for skin & gut)",
-          "Cheap Street Food Oils (Used multiple times, worst for skin)",
-          "Butter Popcorn (Artificial butter damages skin barrier)",
-          "Fried Frozen Snacks (French fries, nuggets, frozen samosas)",
-        ],
-      },
-    
-    
+    category: "Deep-Fried & Oily Foods (Causes Acne & Dull Skin!)",
+    items: [
+      "French Fries (Trans fats damage skin barrier)",
+      "Chips (Lays, Kurkure, Bingo = deep-fried & artificial flavors)",
+      "Samosas & Pakoras (Deep-fried with reused unhealthy oils)",
+      "Fried Chicken (KFC & other fast food = worst for skin & health)",
+      "Popcorn (Microwave popcorn has toxic artificial butter)",
+      "Deep-fried Pooris & Bhaturas (Inflammation-causing trans fats)",
+      "Vada Pav & Pav Bhaji (Refined carbs + fried components)",
+      "Puffs & Patties (High in refined flour & bad fats)",
+      "Fried Namkeen (Mixtures, sev, murukku)",
+      "Onion Rings & Cheese Balls (Cheese + deep-fried batter = double damage)",
+    ],
+  },
+  {
+    category: "Processed & Artificially Flavored Foods (Speeds Up Aging!)",
+    items: [
+      "Instant Soups (Maggie Soup, Knorr, etc. – Contains MSG & chemicals)",
+      "Processed Cheese Slices & Cheese Spread (Artificial ingredients)",
+      "Mayonnaise (High in unhealthy oils & preservatives)",
+      "Ketchup (Hidden sugar & artificial flavoring)",
+      "Pickles (High salt content = puffy face & bloating)",
+      "Artificial Flavored Yogurts (Sugar-loaded 'fruit' yogurts)",
+      "Ice Tea & Artificial Juices (Packaged juices have added sugar)",
+      "Packaged Salads with Dressings (Dressings are high in sugar & bad fats)",
+      "Flavored Milk (Sugary additives destroy gut health)",
+      "Instant Coffee Mixes (High sugar + artificial flavors)",
+    ],
+  },
+  {
+    category: "Unhealthy Oils & Fats (Weakens Skin & Increases Wrinkles!)",
+    items: [
+      "Soybean Oil",
+      "Canola Oil",
+      "Palm Oil (Found in cheap chocolates, chips, biscuits)",
+      "Vanaspati (Worst for skin, causes bloating & acne)",
+      "Margarine (Fake butter = high trans fats)",
+      "Dalda Ghee (Processed = inflammatory for skin & gut)",
+      "Cheap Street Food Oils (Used multiple times, worst for skin)",
+      "Butter Popcorn (Artificial butter damages skin barrier)",
+      "Fried Frozen Snacks (French fries, nuggets, frozen samosas)",
+    ],
+  },
 ];
 
 const ProgressTracker = () => {
@@ -100,13 +86,13 @@ const ProgressTracker = () => {
   const [progressData, setProgressData] = useState([]);
 
   useEffect(() => {
-    // **🔥 Reset localStorage when app loads (REMOVE OLD DATA)**
+    // 🔥 Clear old data when app loads
     localStorage.removeItem("progressData");
     setProgressData([]);
   }, []);
 
   useEffect(() => {
-    // **🔥 Save progress after submission**
+    // 🔥 Save progress after submission
     localStorage.setItem("progressData", JSON.stringify(progressData));
   }, [progressData]);
 
@@ -135,7 +121,7 @@ const ProgressTracker = () => {
     if (allChecked()) {
       const today = new Date().toLocaleDateString();
 
-      // **🔥 Ensure only one entry per day**
+      // 🔥 Ensure only one entry per day
       if (!progressData.some((entry) => entry.date === today)) {
         setProgressData([...progressData, { date: today, status: "Achieved" }]);
       }
