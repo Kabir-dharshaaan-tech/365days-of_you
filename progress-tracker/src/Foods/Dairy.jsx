@@ -1,6 +1,57 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const Dairy = () => {
+  const [youtubeLink, setYoutubeLink] = useState("");
+  const [savedVideos, setSavedVideos] = useState([]);
+  const category = "dairy"; // Unique category for this page
+
+  // Extracts YouTube Video ID correctly
+  const getEmbedUrl = (url) => {
+    const videoIdMatch = url.match(
+      /(?:youtube\.com\/(?:.*v=|.*\/)|youtu\.be\/)([^"&?\/ ]{11})/
+    );
+    return videoIdMatch ? `https://www.youtube.com/embed/${videoIdMatch[1]}` : "";
+  };
+
+  // Fetch saved videos from backend (Only for this category)
+  const fetchVideos = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8080/api/videos/${category}`); // Use the correct backend route
+      setSavedVideos(response.data); // Load category-specific videos
+    } catch (error) {
+      console.error("Error fetching videos:", error.response?.data || error.message);
+    }
+  };
+
+  // Load videos when component mounts
+  useEffect(() => {
+    fetchVideos();
+  }, []);
+
+  // Handle input change
+  const handleYoutubeLinkChange = (event) => {
+    setYoutubeLink(event.target.value);
+  };
+
+  // Handle adding a video for "dairy" category
+  const handleAddVideo = async () => {
+    const embedUrl = getEmbedUrl(youtubeLink);
+    if (youtubeLink && embedUrl) {
+      try {
+        await axios.post("http://localhost:8080/api/videos/add", {
+          url: embedUrl,
+          category, // Send category to backend
+        });
+
+        setYoutubeLink(""); // Clear input field
+        fetchVideos(); // Refresh video list after adding
+      } catch (error) {
+        console.error("Error adding video:", error.response?.data || error.message);
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10 px-4">
       <div className="max-w-3xl bg-white shadow-2xl rounded-lg p-6 text-center">
@@ -8,32 +59,42 @@ const Dairy = () => {
         <p className="text-gray-700 text-lg mb-6">
           Consuming dairy and artificial milk products can cause acne, bloating, and hormonal imbalances. Many dairy products contain added hormones and antibiotics, which negatively impact overall health.
         </p>
-        <h2 className="text-2xl font-bold text-red-500 mb-3">🚨 How Dairy Affects Your Body:</h2>
-        <ul className="text-gray-700 text-lg list-disc list-inside mb-6">
-          <li>Triggers acne and increases oil production in the skin.</li>
-          <li>Leads to bloating and digestive issues, especially for lactose-intolerant individuals.</li>
-          <li>Can disrupt hormonal balance, leading to mood swings and weight gain.</li>
-          <li>Contains growth hormones that may contribute to inflammation.</li>
-          <li>Increases mucus production, affecting respiratory health.</li>
-        </ul>
-        <h2 className="text-2xl font-bold text-green-500 mb-3">✅ Healthier Alternatives:</h2>
-        <p className="text-gray-700 text-lg mb-6">
-          Switch to plant-based alternatives like almond milk, oat milk, and coconut milk. These options provide essential nutrients without the side effects of dairy.
-        </p>
-        
-        <h2 className="text-2xl font-bold text-blue-500 mb-4">🎥 Watch This Video to Learn More</h2>
+
+        <h2 className="text-2xl font-bold text-blue-500 mb-4">🎥 Add a YouTube Video</h2>
         <div className="mb-6">
-          <iframe
-            className="w-full h-64 rounded-lg shadow-lg"
-            src="https://www.youtube.com/embed/example"
-            title="How Dairy Affects Your Body"
-            allowFullScreen
-          ></iframe>
+          <input
+            type="text"
+            placeholder="Enter YouTube Video Link"
+            value={youtubeLink}
+            onChange={handleYoutubeLinkChange}
+            className="w-full p-2 border rounded-lg mt-2"
+          />
+          <button
+            onClick={handleAddVideo}
+            className="bg-blue-600 text-white px-4 py-2 mt-2 rounded-lg hover:bg-blue-700 transition"
+          >
+            Add Video
+          </button>
         </div>
+
+        {savedVideos.length > 0 && (
+          <div className="mt-6">
+            <h2 className="text-2xl font-bold text-green-500 mb-3">📌 Saved Videos</h2>
+            {savedVideos.map((video, index) => (
+              <iframe
+                key={index}
+                className="w-full h-64 rounded-lg shadow-lg mt-4"
+                src={video.url}
+                title={`YouTube Video ${index + 1}`}
+                allowFullScreen
+              ></iframe>
+            ))}
+          </div>
+        )}
 
         <a
           href="/food"
-          className="bg-red-600 text-white py-2 px-5 rounded-lg font-bold hover:bg-red-700 transition"
+          className="bg-red-600 text-white py-2 px-5 rounded-lg font-bold hover:bg-red-700 transition mt-6"
         >
           Back to Food Categories
         </a>

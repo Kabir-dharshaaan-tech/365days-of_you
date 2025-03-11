@@ -1,40 +1,100 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-const HighSalt = () => {
+const FriedFoods = () => {
+  const [youtubeLink, setYoutubeLink] = useState("");
+  const [savedVideos, setSavedVideos] = useState([]);
+  const category = "fried-foods"; // Unique category for this page
+
+  // Extracts YouTube Video ID correctly
+  const getEmbedUrl = (url) => {
+    const videoIdMatch = url.match(
+      /(?:youtube\.com\/(?:.*v=|.*\/)|youtu\.be\/)([^"&?\/ ]{11})/
+    );
+    return videoIdMatch ? `https://www.youtube.com/embed/${videoIdMatch[1]}` : "";
+  };
+
+  // Fetch saved videos from backend (Only for this category)
+  const fetchVideos = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8080/api/videos/${category}`); // Use the correct backend route
+      setSavedVideos(response.data); // Load category-specific videos
+    } catch (error) {
+      console.error("Error fetching videos:", error.response?.data || error.message);
+    }
+  };
+
+  // Load videos when component mounts
+  useEffect(() => {
+    fetchVideos();
+  }, []);
+
+  // Handle input change
+  const handleYoutubeLinkChange = (event) => {
+    setYoutubeLink(event.target.value);
+  };
+
+  // Handle adding a video for "fried-foods" category
+  const handleAddVideo = async () => {
+    const embedUrl = getEmbedUrl(youtubeLink);
+    if (youtubeLink && embedUrl) {
+      try {
+        await axios.post("http://localhost:8080/api/videos/add", {
+          url: embedUrl,
+          category, // Send category to backend
+        });
+
+        setYoutubeLink(""); // Clear input field
+        fetchVideos(); // Refresh video list after adding
+      } catch (error) {
+        console.error("Error adding video:", error.response?.data || error.message);
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10 px-4">
       <div className="max-w-3xl bg-white shadow-2xl rounded-lg p-6 text-center">
-        <h1 className="text-4xl font-extrabold text-red-600 mb-4">🧂 The Truth About High-Salt Foods</h1>
+        <h1 className="text-4xl font-extrabold text-red-600 mb-4">🍟 The Truth About Fried Foods</h1>
         <p className="text-gray-700 text-lg mb-6">
-          Consuming too much salt can cause water retention, leading to puffiness, dark circles, and increased blood pressure.
-          It negatively affects kidney health and speeds up skin aging.
+          Fried foods are often loaded with unhealthy fats and calories, increasing the risk of heart disease, obesity, and inflammation.
         </p>
-        <h2 className="text-2xl font-bold text-red-500 mb-3">🚨 How High-Salt Foods Affect Your Body:</h2>
-        <ul className="text-gray-700 text-lg list-disc list-inside mb-6">
-          <li>Causes dehydration, leading to dry and dull skin.</li>
-          <li>Increases puffiness, bloating, and dark circles under the eyes.</li>
-          <li>Raises blood pressure, putting stress on the heart and kidneys.</li>
-          <li>Triggers water retention, making the body look swollen.</li>
-          <li>Weakens bones by causing calcium loss over time.</li>
-        </ul>
-        <h2 className="text-2xl font-bold text-green-500 mb-3">✅ Healthier Alternatives:</h2>
-        <p className="text-gray-700 text-lg mb-6">
-          Reduce salt intake and use healthier options like Himalayan salt, fresh herbs, and homemade broth for better taste and nutrition.
-        </p>
-        
-        <h2 className="text-2xl font-bold text-blue-500 mb-4">🎥 Watch This Video to Learn More</h2>
+
+        <h2 className="text-2xl font-bold text-blue-500 mb-4">🎥 Add a YouTube Video</h2>
         <div className="mb-6">
-          <iframe
-            className="w-full h-64 rounded-lg shadow-lg"
-            src="https://www.youtube.com/embed/example"
-            title="How High-Salt Foods Affect Your Body"
-            allowFullScreen
-          ></iframe>
+          <input
+            type="text"
+            placeholder="Enter YouTube Video Link"
+            value={youtubeLink}
+            onChange={handleYoutubeLinkChange}
+            className="w-full p-2 border rounded-lg mt-2"
+          />
+          <button
+            onClick={handleAddVideo}
+            className="bg-blue-600 text-white px-4 py-2 mt-2 rounded-lg hover:bg-blue-700 transition"
+          >
+            Add Video
+          </button>
         </div>
+
+        {savedVideos.length > 0 && (
+          <div className="mt-6">
+            <h2 className="text-2xl font-bold text-green-500 mb-3">📌 Saved Videos</h2>
+            {savedVideos.map((video, index) => (
+              <iframe
+                key={index}
+                className="w-full h-64 rounded-lg shadow-lg mt-4"
+                src={video.url}
+                title={`YouTube Video ${index + 1}`}
+                allowFullScreen
+              ></iframe>
+            ))}
+          </div>
+        )}
 
         <a
           href="/food"
-          className="bg-red-600 text-white py-2 px-5 rounded-lg font-bold hover:bg-red-700 transition"
+          className="bg-red-600 text-white py-2 px-5 rounded-lg font-bold hover:bg-red-700 transition mt-6"
         >
           Back to Food Categories
         </a>
@@ -43,4 +103,4 @@ const HighSalt = () => {
   );
 };
 
-export default HighSalt;
+export default FriedFoods;
